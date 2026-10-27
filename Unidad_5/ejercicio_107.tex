@@ -1,0 +1,117 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+
+\geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
+
+\title{\textbf{Resolución Detallada - Ejercicio 107}}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Enunciado}
+De una caja que contiene 4 bolitas negras y 2 verdes, se seleccionan tres de ellas en sucesión con reemplazo. Hallar la tabla de la función de probabilidad para el número de bolitas verdes.
+
+\vspace{0.5cm}
+
+\section*{Definición de la Variable Aleatoria}
+El experimento consiste en extraer 3 bolitas en sucesión \textbf{con reemplazo} de una caja que tiene un total de 6 bolitas (4 negras y 2 verdes).
+
+Definimos nuestra variable aleatoria de interés:
+\begin{center}
+    $X =$ ``Número de bolitas verdes extraídas en 3 extracciones''
+\end{center}
+
+Los valores posibles que puede tomar la variable $X$ son:
+\begin{center}
+    $R_x = \{0, 1, 2, 3\}$
+\end{center}
+
+\vspace{0.5cm}
+
+\section*{Enfoque 1: Uso de la Distribución Binomial}
+Al indicar que las extracciones se realizan \textbf{con reemplazo}, la composición de la caja vuelve a ser la original antes de cada nueva extracción. Esto garantiza dos cosas fundamentales:
+\begin{enumerate}
+    \item La probabilidad de sacar una bolita verde es constante en cada extracción.
+    \item Cada extracción es un evento \textbf{independiente} de los demás.
+\end{enumerate}
+
+Estas características, sumadas a que solo hay dos resultados posibles por extracción (éxito = verde, fracaso = negra) y un número fijo de ensayos ($n=3$), confirman que la variable aleatoria $X$ sigue una \textbf{Distribución Binomial}.
+
+\subsection*{Parámetros del modelo}
+\begin{itemize}
+    \item Número de ensayos: $n = 3$
+    \item Probabilidad de éxito (sacar bolita verde): $p = \frac{2}{6} = \frac{1}{3}$
+    \item Probabilidad de fracaso (sacar bolita negra): $q = 1 - p = \frac{4}{6} = \frac{2}{3}$
+\end{itemize}
+
+La fórmula general de la función de probabilidad binomial es:
+$$P(X = x) = \binom{n}{x} p^x q^{n-x}$$
+
+\subsection*{Cálculo de las probabilidades}
+\begin{itemize}
+    \item \textbf{Para $X = 0$ (Ninguna verde, tres negras):}
+    $$P(X = 0) = \binom{3}{0} \left(\frac{1}{3}\right)^0 \left(\frac{2}{3}\right)^3 = 1 \cdot 1 \cdot \frac{8}{27} = \frac{8}{27}$$
+
+    \item \textbf{Para $X = 1$ (Una verde, dos negras):}
+    $$P(X = 1) = \binom{3}{1} \left(\frac{1}{3}\right)^1 \left(\frac{2}{3}\right)^2 = 3 \cdot \frac{1}{3} \cdot \frac{4}{9} = \frac{12}{27} = \frac{4}{9}$$
+
+    \item \textbf{Para $X = 2$ (Dos verdes, una negra):}
+    $$P(X = 2) = \binom{3}{2} \left(\frac{1}{3}\right)^2 \left(\frac{2}{3}\right)^1 = 3 \cdot \frac{1}{9} \cdot \frac{2}{3} = \frac{6}{27} = \frac{2}{9}$$
+
+    \item \textbf{Para $X = 3$ (Tres verdes, ninguna negra):}
+    $$P(X = 3) = \binom{3}{3} \left(\frac{1}{3}\right)^3 \left(\frac{2}{3}\right)^0 = 1 \cdot \frac{1}{27} \cdot 1 = \frac{1}{27}$$
+\end{itemize}
+
+\vspace{0.5cm}
+
+\section*{Enfoque 2: Regla de la Multiplicación (Sucesos Independientes)}
+Otra forma excelente de pensarlo es a través de un arreglo de 3 elementos (las 3 extracciones). Como hay reemplazo, la probabilidad de sacar verde ($V$) o negra ($N$) se mantiene constante en cada extracción. Multiplicamos las probabilidades de cada extracción independiente y luego ordenamos.
+
+\begin{itemize}
+    \item \textbf{Para $X = 0$:} Solo hay una secuencia posible: $(N, N, N)$.
+    $$P(N \cap N \cap N) = P(N) \cdot P(N) \cdot P(N) = \frac{2}{3} \cdot \frac{2}{3} \cdot \frac{2}{3} = \frac{8}{27}$$
+
+    \item \textbf{Para $X = 1$:} La secuencia puede ser $(V, N, N)$, $(N, V, N)$ o $(N, N, V)$. Hay $\binom{3}{1} = 3$ formas de ordenar una verde y dos negras. La probabilidad de una de estas secuencias, por ejemplo la primera, es:
+    $$P(V \cap N \cap N) = \frac{1}{3} \cdot \frac{2}{3} \cdot \frac{2}{3} = \frac{4}{27}$$
+    Multiplicando por las 3 secuencias posibles: $3 \cdot \frac{4}{27} = \frac{12}{27} = \frac{4}{9}$.
+
+    \item \textbf{Para $X = 2$:} Las secuencias posibles son $(V, V, N)$, $(V, N, V)$ o $(N, V, V)$. Hay $\binom{3}{2} = 3$ órdenes.
+    $$P(V \cap V \cap N) = \frac{1}{3} \cdot \frac{1}{3} \cdot \frac{2}{3} = \frac{2}{27}$$
+    Multiplicando por 3 secuencias: $3 \cdot \frac{2}{27} = \frac{6}{27} = \frac{2}{9}$.
+
+    \item \textbf{Para $X = 3$:} Solo hay una secuencia posible: $(V, V, V)$.
+    $$P(V \cap V \cap V) = \frac{1}{3} \cdot \frac{1}{3} \cdot \frac{1}{3} = \frac{1}{27}$$
+\end{itemize}
+\textit{Nota: Este razonamiento de multiplicar la probabilidad de una rama específica por la cantidad de permutaciones válidas es exactamente el mecanismo que da origen a la fórmula de la Distribución Binomial.}
+
+\vspace{0.5cm}
+
+\section*{Tabla de la Función de Probabilidad}
+A continuación se presenta la tabla resumen de la función de probabilidad para $X$:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{$X$} & $0$ & $1$ & $2$ & $3$ \\
+\hline
+\textbf{$P(X)$} & $\frac{8}{27}$ & $\frac{12}{27}$ & $\frac{6}{27}$ & $\frac{1}{27}$ \\
+\hline
+\end{tabular}
+\end{center}
+
+Verificación: La suma de todas las probabilidades del recorrido debe ser exactamente 1.
+$$\sum f(x) = \frac{8}{27} + \frac{12}{27} + \frac{6}{27} + \frac{1}{27} = \frac{27}{27} = 1$$
+
+\end{document}
