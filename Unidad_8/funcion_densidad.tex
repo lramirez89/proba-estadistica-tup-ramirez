@@ -1,0 +1,141 @@
+\documentclass[11pt, aspectratio=169]{beamer}
+
+% --- Configuración requerida ---
+\usepackage{fontspec}
+\usepackage[spanish, bidi=basic, provide=*]{babel}
+\babelprovide[import, onchar=ids fonts]{spanish}
+\babelfont{rm}{Noto Sans}
+\babelfont{sf}{Noto Sans} % Beamer usa sans-serif por defecto
+
+\usepackage{amsmath}
+
+% --- Tema de la presentación ---
+\usetheme{Boadilla}
+\usecolortheme{seahorse}
+
+\title{De lo Discreto a lo Continuo}
+\subtitle{Construyendo el concepto de Función de Densidad}
+\author{Probabilidad y Estadística}
+\date{}
+
+\begin{document}
+
+% Diapositiva 1
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Diapositiva 2
+\begin{frame}{Variables Discretas: El punto de partida}
+    \begin{itemize}
+        \item En una variable discreta, los valores posibles están separados y son contables (ej. cantidad de hijos: $x=0, 1, 2, 3$).
+        \item Podemos graficar la \textbf{probabilidad} de cada valor exacto usando un gráfico de barras.
+        \item Cada barra representa $P(X=x)$.
+    \end{itemize}
+    \vspace{0.5cm}
+    
+    % Gráfico simulado con reglas de LaTeX
+    \begin{center}
+        \begin{tabular}{cccc}
+            \textcolor{blue}{\rule{0.8cm}{1.0cm}} & \textcolor{blue}{\rule{0.8cm}{2.0cm}} & \textcolor{blue}{\rule{0.8cm}{1.5cm}} & \textcolor{blue}{\rule{0.8cm}{0.5cm}} \\
+            $x=0$ & $x=1$ & $x=2$ & $x=3$ \\
+            $P=0.2$ & $P=0.4$ & $P=0.3$ & $P=0.1$
+        \end{tabular}
+    \end{center}
+\end{frame}
+
+% Diapositiva 3
+\begin{frame}{Probabilidad en Variables Discretas}
+    \begin{itemize}
+        \item Para calcular la probabilidad de un conjunto de valores, simplemente \textbf{sumamos} las alturas de las barras correspondientes.
+        \item Recordá: la suma de todas las barras siempre da $1$.
+        \item Ejemplo: Queremos saber la probabilidad de tener 1 hijo o menos: 
+        \begin{equation*}
+            P(X \le 1) = P(X=0) + P(X=1) = 0.2 + 0.4 = \mathbf{0.6}
+        \end{equation*}
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{center}
+        \begin{tabular}{cccc}
+            \textcolor{orange}{\rule{0.8cm}{1.0cm}} & \textcolor{orange}{\rule{0.8cm}{2.0cm}} & \textcolor{lightgray}{\rule{0.8cm}{1.5cm}} & \textcolor{lightgray}{\rule{0.8cm}{0.5cm}} \\
+            $x=0$ & $x=1$ & $x=2$ & $x=3$
+        \end{tabular}
+    \end{center}
+\end{frame}
+
+% Diapositiva 4
+\begin{frame}{El problema de las Variables Continuas}
+    \begin{itemize}
+        \item ¿Qué pasa con variables como el \textbf{peso} o la \textbf{altura}?
+        \item No hay categorías exactas separadas. Entre 160 cm y 161 cm hay infinitos valores posibles (160.5, 160.897, etc.).
+        \item Como hay infinitos valores posibles, la probabilidad de medir \textit{exactamente} 160.000... cm es \textbf{matemáticamente cero}.
+        \item Consecuencia: ¡Ya no podemos usar barras simples para indicar la probabilidad de cada valor puntual!
+    \end{itemize}
+\end{frame}
+
+% Diapositiva 5
+\begin{frame}{Inventando categorías: El Histograma}
+    \begin{itemize}
+        \item Para resolverlo y poder graficar, agrupamos los datos continuos en \textbf{intervalos} (bins).
+        \item Esto nos permite agrupar la variable en categorías "discretas" artificiales y construir un \textbf{Histograma}.
+    \end{itemize}
+    \vspace{0.5cm}
+    
+    \begin{center}
+        % Bloques contiguos para simular un histograma
+        \textcolor{cyan}{\rule{1.3cm}{0.5cm}}%
+        \textcolor{cyan}{\rule{1.3cm}{1.5cm}}%
+        \textcolor{cyan}{\rule{1.3cm}{2.5cm}}%
+        \textcolor{cyan}{\rule{1.3cm}{2.0cm}}%
+        \textcolor{cyan}{\rule{1.3cm}{0.8cm}}
+        
+        \vspace{0.2cm}
+        \small $[150-160)$ \hspace{0.1cm} $[160-170)$ \hspace{0.1cm} $[170-180)$ \hspace{0.1cm} $[180-190)$ \hspace{0.1cm} $[190-200)$
+    \end{center}
+\end{frame}
+
+% Diapositiva 6
+\begin{frame}{Probabilidad en un Histograma}
+    \begin{itemize}
+        \item En este histograma, la altura ya NO es la probabilidad.
+        \item La probabilidad de que un valor caiga dentro de un intervalo se representa mediante el \textbf{ÁREA} del rectángulo.
+        \item $\text{Área} = \text{Base (ancho del intervalo)} \times \text{Altura (densidad)}$.
+        \item Al igual que en las discretas, si queremos la probabilidad de abarcar varios intervalos, sumamos sus áreas (el área total de todos los rectángulos es 1).
+    \end{itemize}
+\end{frame}
+
+% Diapositiva 7
+\begin{frame}{Refinando los intervalos}
+    \begin{itemize}
+        \item Si tenemos una muestra inmensa de personas, podemos achicar los intervalos para ser más precisos (ej. cada 2 cm, luego cada 1 cm...).
+        \item Al hacer esto, la base de los rectángulos disminuye y la cantidad de barras se multiplica.
+    \end{itemize}
+    \vspace{0.5cm}
+    
+    \begin{center}
+        % Simulación de barras muy finas aproximando una curva
+        \textcolor{cyan}{\rule{0.3cm}{0.2cm}}\textcolor{cyan}{\rule{0.3cm}{0.5cm}}\textcolor{cyan}{\rule{0.3cm}{0.9cm}}\textcolor{cyan}{\rule{0.3cm}{1.4cm}}\textcolor{cyan}{\rule{0.3cm}{2.0cm}}\textcolor{cyan}{\rule{0.3cm}{2.5cm}}\textcolor{cyan}{\rule{0.3cm}{2.8cm}}\textcolor{cyan}{\rule{0.3cm}{2.5cm}}\textcolor{cyan}{\rule{0.3cm}{2.0cm}}\textcolor{cyan}{\rule{0.3cm}{1.4cm}}\textcolor{cyan}{\rule{0.3cm}{0.9cm}}\textcolor{cyan}{\rule{0.3cm}{0.5cm}}\textcolor{cyan}{\rule{0.3cm}{0.2cm}}
+    \end{center}
+    
+    \begin{itemize}
+        \item El perfil dentado del histograma comienza a suavizarse.
+    \end{itemize}
+\end{frame}
+
+% Diapositiva 8
+\begin{frame}{El Límite: La Función de Densidad}
+    \begin{itemize}
+        \item Si los intervalos se hacen \textbf{infinitesimalmente pequeños} (la base tiende a $0$):
+        \begin{enumerate}
+            \item Perdemos definitivamente la noción del "gráfico de barras". 
+            \item El perfil escalonado se transforma en una curva suave y continua: la \textbf{Función de Densidad} $f(x)$.
+            \item La operación de "sumar las áreas de los rectángulos" se transforma matemáticamente en una \textbf{Integral}.
+        \end{enumerate}
+        \item \textbf{Conclusión:} La lógica de la probabilidad \textbf{no cambió}. Sigue siendo el cálculo de un \textbf{ÁREA}, pero ahora calculada debajo de una curva en lugar de sumar bloques separados.
+        \begin{equation*}
+            P(a \le X \le b) = \int_{a}^{b} f(x) dx
+        \end{equation*}
+    \end{itemize}
+\end{frame}
+
+\end{document}

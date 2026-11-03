@@ -1,0 +1,138 @@
+\documentclass[11pt, aspectratio=169]{beamer}
+
+% --- Configuración requerida ---
+\usepackage{fontspec}
+\usepackage[spanish, bidi=basic, provide=*]{babel}
+\babelprovide[import, onchar=ids fonts]{spanish}
+\babelfont{rm}{Noto Sans}
+\babelfont{sf}{Noto Sans}
+
+\usepackage{amsmath}
+\usepackage{tikz}
+
+% --- Tema de la presentación ---
+\usetheme{Boadilla}
+\usecolortheme{seahorse}
+
+\title{Distribución Normal: El Problema Inverso}
+\subtitle{Búsqueda de percentiles y valores críticos (Ejemplo 3)}
+\author{Probabilidad y Estadística}
+\date{}
+
+\begin{document}
+
+% Diapositiva 1
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Diapositiva 2
+\begin{frame}{El Problema}
+    \textbf{Enunciado (Ejemplo 3 - Parte b):}
+    \vspace{0.3cm}
+    
+    La distribución de las alturas de los jugadores de básquet de un equipo de la NBA es normal con media $\mu = 1.95$ m y desvío $\sigma = 0.05$ m.
+    
+    \vspace{0.3cm}
+    \textit{Calcular la altura superada por el 20\% de los jugadores.}
+    
+    \vspace{0.5cm}
+    \textbf{¿En qué es distinto del problema anterior?}
+    \begin{itemize}
+        \item En el \textbf{Ejemplo 2}, teníamos un valor exacto (25 minutos) y nos preguntaban qué porcentaje de veces ocurría (\textit{Valor $\rightarrow$ Probabilidad}).
+        \item Aquí ocurre exactamente lo \textbf{inverso}: Nos dan la probabilidad o porcentaje ($20\%$) y nos piden encontrar cuál es el valor exacto de altura (metros) que divide a ese grupo (\textit{Probabilidad $\rightarrow$ Valor}).
+    \end{itemize}
+\end{frame}
+
+% Diapositiva 3
+\begin{frame}{El Área Total es 1 (El truco para resolverlo)}
+    \begin{itemize}
+        \item Sabemos que el área total bajo la curva normal estándar representa el $100\%$ de la probabilidad. Matemáticamente, el área es $\mathbf{1}$.
+        \item Nos piden encontrar una altura $x_1$ tal que el $20\%$ de los jugadores mida \textit{más} que eso. Es decir, el área a la derecha de $x_1$ debe ser $0.20$.
+        \begin{equation*}
+            P(X > x_1) = 0.20
+        \end{equation*}
+        \item \textbf{El problema:} Las tablas de distribución normal acumulan área desde la izquierda (desde $-\infty$ hasta el valor).
+        \item \textbf{La solución:} Usamos la propiedad del área total. Si a la derecha hay $0.20$, a la izquierda debe estar el $0.80$ restante.
+        \begin{equation*}
+            P(X \le x_1) = 1 - 0.20 = \mathbf{0.80}
+        \end{equation*}
+    \end{itemize}
+\end{frame}
+
+% Diapositiva 4
+\begin{frame}{Representación Gráfica del Problema Inverso}
+    \begin{center}
+        \begin{tikzpicture}[scale=1.4]
+            % Sombreado Izquierdo (80% del área)
+            \fill[cyan!30, domain=-3.5:0.84, variable=\x]
+              (-3.5, 0) -- plot ({\x}, {2.5*exp(-\x*\x/2)}) -- (0.84, 0) -- cycle;
+              
+            % Sombreado Derecho (20% del área)
+            \fill[orange!50, domain=0.84:3.5, variable=\x]
+              (0.84, 0) -- plot ({\x}, {2.5*exp(-\x*\x/2)}) -- (3.5, 0) -- cycle;
+            
+            % Curva Normal
+            \draw[thick, blue, domain=-3.5:3.5, smooth, samples=100, variable=\x] 
+                plot ({\x}, {2.5*exp(-\x*\x/2)});
+            
+            % Eje horizontal
+            \draw[->, thick] (-3.8, 0) -- (3.8, 0);
+            
+            % Lineas de corte
+            \draw[dashed, darkgray] (0,0) -- (0, 2.5);
+            \draw[dashed, thick, black] (0.84,0) -- (0.84, {2.5*exp(-0.84*0.84/2)});
+            
+            % Etiquetas de texto - Áreas
+            \node at (-0.8, 1) {\textbf{Área $= 0.80$ (Buscamos en tabla)}};
+            \node[text=red!60!black] at (1.8, 0.4) {\textbf{Área $= 0.20$}};
+            \node[text=red!60!black] at (1.8, 0.2) {\textbf{(Dato)}};
+            
+            % Ejes X y Z
+            \node[below] at (0, -0.1) {$\mu = 1.95$};
+            \node[below, font=\bfseries] at (0.84, -0.1) {$x_1 = ?$};
+            
+            \node[below] at (0, -0.6) {$z = 0$};
+            \node[below, font=\bfseries] at (0.84, -0.6) {$z_1 = ?$};
+            
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+% Diapositiva 5
+\begin{frame}{Paso 1: Uso inverso de la Tabla Z}
+    \begin{itemize}
+        \item Sabemos que el área acumulada hasta nuestro valor desconocido es $0.80$.
+        \begin{equation*}
+            P(Z \le z_1) = 0.80
+        \end{equation*}
+        \item Vamos a la tabla de la Normal Estándar. En lugar de buscar en los márgenes exteriores para obtener la probabilidad en el centro, \textbf{buscamos la probabilidad $0.8000$ (o la más cercana) en el centro de la tabla}.
+        \item El valor más cercano en tabla suele ser $0.7995$.
+        \item Miramos hacia los márgenes para ver a qué valor de $Z$ corresponde:
+        \begin{equation*}
+            z_1 \approx 0.84
+        \end{equation*}
+        \item Esto significa que la altura que buscamos está exactamente a $0.84$ desvíos estándar por encima de la media del equipo.
+    \end{itemize}
+\end{frame}
+
+% Diapositiva 6
+\begin{frame}{Paso 2: Desestandarización y Resultado}
+    \begin{itemize}
+        \item Ya sabemos que $z_1 = 0.84$. Ahora debemos "desestandarizar" este valor para pasarlo de desvíos estándar a metros.
+        \item Tomamos la fórmula de estandarización original:
+        \begin{equation*}
+            Z = \frac{X - \mu}{\sigma}
+        \end{equation*}
+        \item Y despejamos $X$ (o simplemente reemplazamos con nuestros datos y despejamos):
+        \begin{align*}
+            0.84 &= \frac{x_1 - 1.95}{0.05} \\
+            0.84 \times 0.05 &= x_1 - 1.95 \\
+            0.042 &= x_1 - 1.95 \\
+            x_1 &= 1.95 + 0.042 = \mathbf{1.992}
+        \end{align*}
+        \item \textbf{Respuesta:} La altura superada por el 20\% de los jugadores de la NBA es de \textbf{1.992 metros}.
+    \end{itemize}
+\end{frame}
+
+\end{document}

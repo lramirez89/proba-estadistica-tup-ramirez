@@ -1,0 +1,173 @@
+\documentclass[11pt, aspectratio=169]{beamer}
+
+% --- Configuración requerida ---
+\usepackage{fontspec}
+\usepackage[spanish, bidi=basic, provide=*]{babel}
+\babelprovide[import, onchar=ids fonts]{spanish}
+\babelfont{rm}{Noto Sans}
+\babelfont{sf}{Noto Sans}
+
+\usepackage{amsmath}
+\usepackage{tikz} % Usado para graficar la curva normal de forma nativa
+
+% --- Tema de la presentación ---
+\usetheme{Boadilla}
+\usecolortheme{seahorse}
+
+\title{Distribución Normal: Resolución Paso a Paso}
+\subtitle{Análisis del Problema de Llegadas al Trabajo (Ejemplo 2)}
+\author{Probabilidad y Estadística}
+\date{}
+
+\begin{document}
+
+% Diapositiva 1
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Diapositiva 2
+\begin{frame}{El Problema}
+    \textbf{Enunciado (Ejemplo 2):}
+    \vspace{0.3cm}
+    
+    Una persona acude diariamente al trabajo. El tiempo que tarda en ello se distribuye normalmente, con media de $21.3$ minutos y desviación típica de $2.8$ minutos. A lo largo del año va $256$ días a trabajar.
+    
+    \vspace{0.3cm}
+    Si en el trabajo debe estar a las 8:30 hs y sale de su casa a las 8:05 hs, ¿cuántos días llegará tarde al cabo de un año?
+    
+    \vspace{0.5cm}
+    \textbf{Estrategia de Resolución en 2 Etapas:}
+    \begin{enumerate}
+        \item Calcular la \textbf{probabilidad} de llegar tarde un día cualquiera (Usando la Distribución Normal).
+        \item Analizar el \textbf{comportamiento anual} definiendo una nueva variable aleatoria.
+    \end{enumerate}
+\end{frame}
+
+% Diapositiva 3
+\begin{frame}{Etapa 1: Modelado del tiempo de viaje}
+    \begin{itemize}
+        \item Definimos nuestra primera Variable Aleatoria Continua:
+        \begin{equation*}
+            X = \text{"Tiempo transcurrido en llegar al trabajo (en minutos)"}
+        \end{equation*}
+        \item Sabemos que sigue una distribución normal: 
+        \begin{equation*}
+            X \sim N(\mu = 21.3, \sigma = 2.8)
+        \end{equation*}
+        \item \textbf{¿Cuál es la condición para llegar tarde?}
+        \begin{itemize}
+            \item Sale a las 8:05 hs y debe llegar 8:30 hs.
+            \item Tiene un margen exacto de \textbf{$25$ minutos}.
+            \item Llegará tarde cualquier día que su viaje demore \textit{más} de 25 minutos.
+        \end{itemize}
+        \item \textbf{Objetivo matemático:} Calcular $P(X > 25)$.
+    \end{itemize}
+\end{frame}
+
+% Diapositiva 4
+\begin{frame}{Representación Gráfica: $P(X > 25)$}
+    \begin{center}
+        \begin{tikzpicture}[scale=1.4]
+            % Sombreado del área de interés (x > 25 -> z > 1.32)
+            % Se usa 1.32 ya que (25 - 21.3) / 2.8 = 1.3214...
+            \fill[red!30, domain=1.32:3.5, variable=\x]
+              (1.32, 0) -- plot ({\x}, {2.5*exp(-\x*\x/2)}) -- (3.5, 0) -- cycle;
+            
+            % Curva Normal Estandarizada escalada para mejor visualización
+            \draw[thick, blue, domain=-3.5:3.5, smooth, samples=100, variable=\x] 
+                plot ({\x}, {2.5*exp(-\x*\x/2)});
+            
+            % Eje horizontal central
+            \draw[->, thick] (-3.8, 0) -- (3.8, 0);
+            
+            % Lineas punteadas para la media y el valor de corte
+            \draw[dashed, darkgray] (0,0) -- (0, 2.5);
+            \draw[dashed, darkgray] (1.32,0) -- (1.32, {2.5*exp(-1.32*1.32/2)});
+            
+            % Etiquetas de la Variable Original (X)
+            \node[below, text=blue] at (-3, -0.1) {\textbf{Tiempos (X):}};
+            \node[below] at (0, -0.1) {$\mu = 21.3$};
+            \node[below] at (1.32, -0.1) {$x = 25$};
+            
+            % Etiquetas de la Variable Estandarizada (Z)
+            \node[below, text=black] at (-3, -0.6) {\textbf{Estándar (Z):}};
+            \node[below] at (0, -0.6) {$z = 0$};
+            \node[below] at (1.32, -0.6) {$z = 1.32$};
+            
+            % Flecha señalando el área
+            \draw[->, thick, red!80!black] (2.5, 1) -- (1.6, 0.2);
+            \node[above, text=red!80!black] at (2.5, 1) {\textbf{$P(X > 25)$}};
+            
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+% Diapositiva 5
+\begin{frame}{Etapa 1: Cálculo de la Probabilidad}
+    Para usar la tabla, estandarizamos la variable $X$ transformándola en $Z$:
+    \begin{equation*}
+        Z = \frac{X - \mu}{\sigma}
+    \end{equation*}
+    
+    Reemplazamos con nuestro valor crítico ($x = 25$):
+    \begin{equation*}
+        z = \frac{25 - 21.3}{2.8} = \frac{3.7}{2.8} \approx 1.32
+    \end{equation*}
+    
+    Calculamos la probabilidad (buscando en la tabla para $Z \le 1.32$):
+    \begin{align*}
+        P(X > 25) &= P(Z > 1.32) \\
+                  &= 1 - P(Z \le 1.32) \\
+                  &= 1 - 0.9066 \\
+                  &= \mathbf{0.0934}
+    \end{align*}
+    \textit{Conclusión Etapa 1: Hay un $9.34\%$ de probabilidad de llegar tarde cualquier día dado.}
+\end{frame}
+
+% Diapositiva 6
+\begin{frame}{Etapa 2: La nueva variable aleatoria}
+    El problema no termina ahí. Nos preguntan: \textit{"¿Cuántos días llegará tarde al cabo de un año (256 días)?"}
+    
+    \vspace{0.3cm}
+    Necesitamos definir una \textbf{nueva} variable aleatoria discreta:
+    \begin{equation*}
+        Y = \text{"Cantidad de días que llega tarde en un año"}
+    \end{equation*}
+    
+    \textbf{¿Qué distribución tiene $Y$?}
+    \begin{itemize}
+        \item Consiste en contar "éxitos" (llegar tarde) en $n$ ensayos independientes (días).
+        \item Tiene distribución \textbf{Binomial}, donde:
+        \begin{itemize}
+            \item $n = 256$ (Total de días laborables).
+            \item $p = 0.0934$ (Probabilidad constante de llegar tarde cada día, calculada en la Etapa 1).
+        \end{itemize}
+    \end{itemize}
+    \begin{equation*}
+        Y \sim B(256, \ 0.0934)
+    \end{equation*}
+\end{frame}
+
+% Diapositiva 7
+\begin{frame}{Etapa 2: Resolución Final}
+    Cuando nos preguntan "¿cuántos días llegará tarde?", en realidad nos están pidiendo la \textbf{Esperanza Matemática} (o valor esperado) de esta nueva variable binomial.
+    
+    \vspace{0.3cm}
+    La fórmula de la Esperanza para una distribución Binomial es:
+    \begin{equation*}
+        E(Y) = n \times p
+    \end{equation*}
+    
+    Realizamos el cálculo:
+    \begin{align*}
+        E(Y) &= 256 \times 0.0934 \\
+        E(Y) &= 23.9104
+    \end{align*}
+    
+    \vspace{0.3cm}
+    \textbf{Respuesta Final:} \\
+    Dado que no se puede llegar tarde una fracción de día, redondeamos el resultado. Al cabo de un año de 256 días laborales, se espera que la persona llegue tarde \textbf{aproximadamente 24 días}.
+\end{frame}
+
+\end{document}
