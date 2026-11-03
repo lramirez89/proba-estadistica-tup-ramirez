@@ -1,0 +1,72 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{fontspec}
+\usepackage[spanish, bidi=basic, provide=*]{babel}
+\babelprovide[import, onchar=ids fonts]{spanish}
+\babelfont{rm}{Noto Sans}
+\usepackage{amsmath}
+\usepackage{enumitem}
+
+\begin{document}
+
+\section*{Resolución del Ejercicio 160}
+
+\textbf{Enunciado:} El número de llamadas que recibe una oficina en un día laborable entre las 9 y las 10 horas sigue un proceso de Poisson de parámetro igual a 5 llamadas. Hallar la probabilidad de que:
+\begin{enumerate}[label=\alph*)]
+    \item entre las 9 y las 9:12hs de un día laborable no reciba llamadas
+    \item en 3 días laborables entre las 9 y las 9:12hs reciba un total de 4 llamadas
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\subsection*{Análisis inicial y Modelo}
+
+El problema describe la ocurrencia de eventos (llamadas) a lo largo de un intervalo de tiempo continuo. Esta es la característica principal de un \textbf{proceso de Poisson}. La propiedad fundamental de la distribución de Poisson es que su parámetro de tasa, $\lambda$ (esperanza matemática o promedio de ocurrencias), es estrictamente proporcional a la amplitud del intervalo de tiempo evaluado.
+
+Sea $X$ la variable aleatoria que define el ``número de llamadas recibidas entre las 9:00 y las 10:00 hs'' (un intervalo base de $60$ minutos). Por letra, sabemos que:
+\[ \lambda_{\text{base}} = 5 \text{ llamadas por cada } 60 \text{ minutos.} \]
+
+Para cada inciso, deberemos definir una nueva variable aleatoria reescalando la tasa $\lambda$ al nuevo intervalo de tiempo que nos soliciten. La fórmula de probabilidad puntual de Poisson es:
+\[ P(X = k) = \frac{e^{-\lambda} \cdot \lambda^k}{k!} \]
+
+\vspace{0.5cm}
+
+\subsection*{Parte a) Probabilidad de no recibir llamadas entre las 9 y 9:12 hs}
+
+\textbf{1. Cálculo de la nueva tasa ($\lambda_a$):} \\
+El intervalo solicitado va desde las 9:00 hasta las 9:12 hs, lo cual representa una duración de $12$ minutos. 
+Planteamos una regla de tres simple (proporcionalidad directa) para hallar la nueva tasa esperada en ese lapso:
+\[ \lambda_a = 5 \text{ llamadas} \cdot \left( \frac{12 \text{ minutos}}{60 \text{ minutos}} \right) = 5 \cdot \frac{1}{5} = 1 \text{ llamada cada } 12 \text{ minutos.} \]
+
+\textbf{2. Cálculo de la probabilidad:} \\
+Definimos nuestra nueva variable $X_a \sim \text{Poisson}(\lambda_a = 1)$. 
+Nos piden la probabilidad de no recibir llamadas, es decir, $k = 0$:
+\[ P(X_a = 0) = \frac{e^{-1} \cdot 1^0}{0!} \]
+
+Como $1^0 = 1$ y el factorial de cero $0! = 1$:
+\[ P(X_a = 0) = e^{-1} \approx 0.367879 \]
+
+\textbf{Respuesta a):} La probabilidad de no recibir llamadas entre las 9 y las 9:12 hs es de aproximadamente $0.3679$ (o $36.79\%$).
+
+\vspace{0.5cm}
+
+\subsection*{Parte b) 4 llamadas en 3 días laborables distintos (misma franja horaria)}
+
+\textbf{1. Cálculo de la nueva tasa acumulada ($\lambda_b$):} \\
+Ahora nos piden evaluar qué ocurre en ese mismo bloque de $12$ minutos, pero acumulado a lo largo de $3$ días diferentes. Dado que las ocurrencias en días distintos son independientes, la tasa esperada se suma linealmente.
+La nueva tasa para $3$ días será el triple de la tasa de un solo día (la hallada en el inciso anterior):
+\[ \lambda_b = \lambda_a \cdot 3 = 1 \cdot 3 = 3 \text{ llamadas esperadas en el total de esos } 3 \text{ bloques de } 12 \text{ min.} \]
+
+\textbf{2. Cálculo de la probabilidad:} \\
+Definimos la nueva variable para este escenario de 3 días: $X_b \sim \text{Poisson}(\lambda_b = 3)$. 
+Se nos pide la probabilidad de recibir exactamente un total de $4$ llamadas en ese conjunto, por lo que evaluamos para $k = 4$:
+\[ P(X_b = 4) = \frac{e^{-3} \cdot 3^4}{4!} \]
+\[ P(X_b = 4) = \frac{e^{-3} \cdot 81}{24} \]
+
+Podemos simplificar la fracción dividiendo por $3$:
+\[ P(X_b = 4) = \frac{27}{8} e^{-3} \]
+\[ P(X_b = 4) \approx 3.375 \cdot 0.049787 \approx 0.168031 \]
+
+\textbf{Respuesta b):} La probabilidad de recibir un total de 4 llamadas en esa franja acumulada durante 3 días es de aproximadamente $0.1680$ (o $16.80\%$).
+
+\end{document}

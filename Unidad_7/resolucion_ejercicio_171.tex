@@ -1,0 +1,86 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{fontspec}
+\usepackage[spanish, bidi=basic, provide=*]{babel}
+\babelprovide[import, onchar=ids fonts]{spanish}
+\babelfont{rm}{Noto Sans}
+\usepackage{amsmath}
+\usepackage{enumitem}
+
+\begin{document}
+
+\section*{Resolución del Ejercicio 171}
+
+\textbf{Enunciado:} Si la probabilidad de que un individuo sufra una reacción por una inyección de un determinado suero, en 0,001, determinar la probabilidad de que de un total de 2.000 individuos:
+\begin{enumerate}[label=\alph*)]
+    \item exactamente 3,
+    \item más de 2 individuos tengan reacción.
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\subsection*{1. Planteo del Modelo Original (Binomial)}
+
+Contamos la cantidad de individuos que sufren una reacción alérgica (éxito) dentro de una muestra finita. Como los individuos son independientes y la probabilidad es constante, la variable aleatoria $X$ (número de reacciones) sigue en esencia una distribución Binomial:
+\[ X \sim Bi(n = 2000, \, p = 0.001) \]
+
+Si intentáramos calcular esto usando la fórmula binomial estricta, por ejemplo para $k=3$, tendríamos que calcular:
+\[ P(X = 3) = \binom{2000}{3} (0.001)^3 (0.999)^{1997} = \frac{2000!}{3! \cdot 1997!} (0.001)^3 (0.999)^{1997} \]
+Manejar factoriales de números tan gigantes es muy engorroso (y computacionalmente pesado). 
+
+\subsection*{2. Aproximación a Poisson}
+
+Afortunadamente, existe una regla en probabilidad: cuando el número de ensayos $n$ es muy grande ($n \ge 30$) y la probabilidad de éxito $p$ es muy pequeña ($p \le 0.1$), el cálculo Binomial converge y puede ser aproximado con tremenda precisión usando una \textbf{distribución de Poisson}.
+Para ello, el parámetro $\lambda$ (esperanza) de la nueva distribución de Poisson se define igualando el valor esperado de la Binomial:
+\[ \lambda = n \cdot p = 2000 \cdot 0.001 = 2 \]
+
+Por ende, trabajaremos con la aproximación:
+\[ X \approx \text{Poisson}(\lambda = 2) \]
+La fórmula a utilizar será: $P(X = k) = \frac{e^{-\lambda} \lambda^k}{k!} = \frac{e^{-2} 2^k}{k!}$
+
+\vspace{0.5cm}
+
+\subsection*{Parte a) Exactamente 3 individuos tengan reacción}
+
+Nos piden $P(X = 3)$. Reemplazamos directamente en nuestra fórmula de Poisson:
+\[ P(X = 3) \approx \frac{e^{-2} \cdot 2^3}{3!} \]
+\[ P(X = 3) \approx \frac{e^{-2} \cdot 8}{6} = \frac{4}{3} e^{-2} \]
+
+Sabiendo que $e^{-2} \approx 0.135335$:
+\[ P(X = 3) \approx \frac{4}{3} \cdot 0.135335 \approx 0.180447 \]
+
+\textbf{Respuesta a):} La probabilidad de que exactamente 3 individuos tengan reacción es aproximadamente \textbf{0,180}. (Coincide con la guía).
+
+\vspace{0.5cm}
+
+\subsection*{Parte b) Más de 2 individuos tengan reacción}
+
+Aquí se pide la probabilidad de que ocurran estrictamente ``más de 2'' casos, es decir, $P(X > 2)$. 
+Lo calculamos por complemento:
+\[ P(X > 2) = 1 - P(X \le 2) = 1 - \big[ P(X=0) + P(X=1) + P(X=2) \big] \]
+
+Calculamos las tres probabilidades puntuales necesarias:
+\begin{itemize}
+    \item $P(X=0) = \frac{e^{-2} \cdot 2^0}{0!} = e^{-2} \approx 0.135335$
+    \item $P(X=1) = \frac{e^{-2} \cdot 2^1}{1!} = 2e^{-2} \approx 0.270670$
+    \item $P(X=2) = \frac{e^{-2} \cdot 2^2}{2!} = \frac{4e^{-2}}{2} = 2e^{-2} \approx 0.270670$
+\end{itemize}
+
+Sumamos estas probabilidades:
+\[ P(X \le 2) = e^{-2} + 2e^{-2} + 2e^{-2} = 5e^{-2} \approx 5 \cdot 0.135335 = 0.676675 \]
+
+Finalmente, hallamos el complemento:
+\[ P(X > 2) = 1 - 0.676675 = 0.323325 \]
+
+\vspace{0.3cm}
+\noindent\fbox{
+\parbox{0.95\textwidth}{
+\textbf{Nota sobre la respuesta de la guía:} \\
+La guía indica que la respuesta al inciso b) es \textbf{0,594}. \\
+Ese número, $0.594$, surge de hacer el cálculo para \textbf{``2 o más individuos''} ($P(X \ge 2)$) en lugar de ``más de 2''. 
+Si calculamos $P(X \ge 2) = 1 - P(X \le 1) = 1 - (e^{-2} + 2e^{-2}) = 1 - 3e^{-2} = 1 - 3(0.135335) = 1 - 0.4060 = \mathbf{0.594}$. \\
+Por lo tanto, la respuesta formal y literal al texto es $0.3233$, pero matemáticamente la guía resolvió el caso $P(X \ge 2)$.
+}
+}
+
+\end{document}

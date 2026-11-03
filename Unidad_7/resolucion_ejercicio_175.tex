@@ -1,0 +1,97 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{fontspec}
+\usepackage[spanish, bidi=basic, provide=*]{babel}
+\babelprovide[import, onchar=ids fonts]{spanish}
+\babelfont{rm}{Noto Sans}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{enumitem}
+\setlist[itemize]{label=-}
+
+\begin{document}
+
+\section*{Resolución del Ejercicio 175}
+
+\textbf{Enunciado:} La probabilidad de que un hombre pegue en el blanco es $1/4$.
+(i) Si dispara $7$ veces, ¿cuál es la probabilidad $p$ de que dos veces por lo menos pegue al blanco?
+(ii) ¿Cuántas veces tiene que disparar para que la probabilidad de pegar por lo menos una vez sea mayor que $2/3$?
+
+\vspace{0.5cm}
+
+\subsection*{Parte (i)}
+
+\textbf{Concepto de Éxito en la Binomial:} En un modelo binomial contamos la cantidad total de ``éxitos'' que ocurren en una muestra (o serie de intentos) de tamaño $n$. Es clave entender que el ``éxito'' siempre se refiere a un hecho o evento individual. En este problema, el éxito es el evento aislado de \textit{pegar en el blanco en un único disparo}, el cual tiene una probabilidad intrínseca $p = 1/4$. La pregunta central trata sobre la probabilidad acumulada de lograr ese éxito individual una cierta cantidad de veces (al menos $2$ veces) al repetir el hecho individual $n = 7$ veces.
+
+Para ilustrar cómo se ramifican las probabilidades de cada evento individual, podemos ver un diagrama de árbol para los dos primeros disparos (D1 y D2). Cada rama representa un hecho individual independiente:
+
+\begin{center}
+\begin{tikzpicture}[level distance=2cm,
+  level 1/.style={sibling distance=6cm},
+  level 2/.style={sibling distance=3cm}]
+  \node {\textbf{Inicio}}
+    child {node {D1: Acierto ($p=1/4$)}
+      child {node {D2: Acierto ($p=1/4$)}}
+      child {node {D2: Fallo ($p=3/4$)}}
+    }
+    child {node {D1: Fallo ($p=3/4$)}
+      child {node {D2: Acierto ($p=1/4$)}}
+      child {node {D2: Fallo ($p=3/4$)}}
+    };
+\end{tikzpicture}
+\end{center}
+\vspace{0.3cm}
+
+Definimos la variable aleatoria $X$ como el número de veces que el hombre pega en el blanco en $n = 7$ disparos. Como cada disparo es independiente y tiene una probabilidad de éxito constante $p = 1/4$, asumimos que $X$ sigue una distribución Binomial:
+\[ X \sim Bi(n = 7, p = 1/4) \]
+
+Queremos calcular la probabilidad de que pegue en el blanco por lo menos dos veces, es decir, $P(X \ge 2)$. Para evitar calcular y sumar desde $X=2$ hasta $X=7$, utilizaremos la probabilidad del evento complementario:
+\[ P(X \ge 2) = 1 - P(X \le 1) = 1 - \left( P(X = 0) + P(X = 1) \right) \]
+
+Calculamos las probabilidades puntuales utilizando la función de probabilidad de la distribución Binomial, $P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$:
+
+Para $X = 0$:
+\[ P(X = 0) = \binom{7}{0} \left(\frac{1}{4}\right)^0 \left(\frac{3}{4}\right)^7 = 1 \cdot 1 \cdot \frac{2187}{16384} = \frac{2187}{16384} \]
+
+Para $X = 1$:
+\[ P(X = 1) = \binom{7}{1} \left(\frac{1}{4}\right)^1 \left(\frac{3}{4}\right)^6 = 7 \cdot \frac{1}{4} \cdot \frac{729}{4096} = \frac{5103}{16384} \]
+
+Sumamos ambas probabilidades:
+\[ P(X \le 1) = \frac{2187}{16384} + \frac{5103}{16384} = \frac{7290}{16384} \]
+
+Simplificamos la fracción dividiendo numerador y denominador por $2$:
+\[ P(X \le 1) = \frac{3645}{8192} \]
+
+Finalmente, calculamos la probabilidad buscada restando esta suma a $1$:
+\[ P(X \ge 2) = 1 - \frac{3645}{8192} = \frac{8192 - 3645}{8192} = \frac{4547}{8192} \]
+
+\textbf{Respuesta (i):} La probabilidad de que pegue en el blanco al menos dos veces es $\frac{4547}{8192}$.
+
+\vspace{0.5cm}
+
+\subsection*{Parte (ii)}
+
+Ahora buscamos el número de disparos $n$ necesarios para que la probabilidad de pegar en el blanco por lo menos una vez sea mayor que $2/3$.
+Sea $Y$ el número de aciertos en $n$ disparos, con $Y \sim Bi(n, 1/4)$. Queremos encontrar el mínimo valor de $n$ tal que:
+\[ P(Y \ge 1) > \frac{2}{3} \]
+
+Nuevamente, utilizamos el complemento para facilitar el desarrollo:
+\[ P(Y \ge 1) = 1 - P(Y = 0) \]
+\[ 1 - \binom{n}{0} \left(\frac{1}{4}\right)^0 \left(\frac{3}{4}\right)^n > \frac{2}{3} \]
+\[ 1 - \left(\frac{3}{4}\right)^n > \frac{2}{3} \]
+
+Despejamos la desigualdad:
+\[ 1 - \frac{2}{3} > \left(\frac{3}{4}\right)^n \]
+\[ \frac{1}{3} > \left(\frac{3}{4}\right)^n \]
+
+Evaluamos esta condición para distintos valores enteros y crecientes de $n$:
+\begin{itemize}
+    \item Si $n = 1$: $\left(\frac{3}{4}\right)^1 = 0.75$ (No es menor a $1/3 \approx 0.333$)
+    \item Si $n = 2$: $\left(\frac{3}{4}\right)^2 = \frac{9}{16} = 0.5625$ (No es menor a $1/3$)
+    \item Si $n = 3$: $\left(\frac{3}{4}\right)^3 = \frac{27}{64} \approx 0.4218$ (No es menor a $1/3$)
+    \item Si $n = 4$: $\left(\frac{3}{4}\right)^4 = \frac{81}{256} \approx 0.3164$ (¡Sí, es menor a $1/3$!)
+\end{itemize}
+
+\textbf{Respuesta (ii):} Tiene que disparar $4$ veces para lograr que la probabilidad de acertar al menos una vez supere los $2/3$.
+
+\end{document}
