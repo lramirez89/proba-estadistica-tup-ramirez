@@ -1,0 +1,76 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{fontspec}
+\usepackage[spanish, bidi=basic, provide=*]{babel}
+\babelprovide[import, onchar=ids fonts]{spanish}
+\babelfont{rm}{Noto Sans}
+\usepackage{amsmath}
+
+\begin{document}
+
+\section*{Resolución del Ejercicio 190 (Distribución Normal)}
+
+\textbf{Enunciado:} En un proceso industrial el diámetro de un balero es una importante parte componente. El comprador establece en sus especificaciones que el diámetro debe ser $3,0 \pm 0,01$ cm. No se acepta ningún balero que se salga de ésta especificación. Se sabe que en el proceso, el diámetro de un balero tiene una distribución normal con una media de 3 y una desviación estándar de 0,005. En promedio ¿cuántos baleros fabricados se descartarán?
+
+\vspace{0.5cm}
+
+\subsection*{1. Identificación de la Variable y Parámetros}
+Sea $X$ la variable aleatoria continua que define el ``diámetro del balero fabricado, en centímetros''.
+Según el enunciado, $X$ sigue una distribución Normal con los siguientes parámetros:
+\begin{itemize}
+    \item Media poblacional: $\mu = 3,0$ cm.
+    \item Desviación estándar: $\sigma = 0,005$ cm.
+\end{itemize}
+Por lo tanto, lo denotamos como: $X \sim N(3,0; \, 0,005)$.
+
+\subsection*{2. Definición de la Especificación (Intervalo de Aceptación)}
+El comprador exige que el diámetro esté en el rango de $3,0 \pm 0,01$ cm.
+Calculamos los límites inferior y superior aceptables:
+\begin{itemize}
+    \item Límite Inferior ($L_I$) = $3,0 - 0,01 = 2,99$ cm.
+    \item Límite Superior ($L_S$) = $3,0 + 0,01 = 3,01$ cm.
+\end{itemize}
+La probabilidad de que un balero sea \textbf{aceptado} es la probabilidad de que su diámetro caiga dentro de este intervalo continuo: $P(2,99 \le X \le 3,01)$.
+
+\subsection*{3. Estandarización a la Normal Estándar ($Z$)}
+Para poder utilizar las tablas de distribución normal, transformamos nuestra variable $X$ a la variable estándar $Z$ mediante la fórmula de tipificación:
+\[ Z = \frac{X - \mu}{\sigma} \]
+
+Calculamos los valores de $Z$ para ambos límites de tolerancia:
+\begin{itemize}
+    \item Para el límite inferior ($X = 2,99$): 
+    \[ Z_1 = \frac{2,99 - 3,0}{0,005} = \frac{-0,01}{0,005} = -2,00 \]
+    
+    \item Para el límite superior ($X = 3,01$): 
+    \[ Z_2 = \frac{3,01 - 3,0}{0,005} = \frac{0,01}{0,005} = 2,00 \]
+\end{itemize}
+
+\subsection*{4. Cálculo de la Probabilidad de Aceptación}
+Ahora buscamos la probabilidad de aceptación equivalente en la distribución Normal Estándar:
+\[ P(2,99 \le X \le 3,01) = P(-2,00 \le Z \le 2,00) \]
+
+Por propiedades del cálculo del área bajo la curva normal, el área entre dos valores es igual al área acumulada hasta el límite superior menos el área acumulada hasta el límite inferior:
+\[ P(-2,00 \le Z \le 2,00) = P(Z \le 2,00) - P(Z \le -2,00) \]
+
+Buscando en la tabla de la distribución Normal Estándar acumulada:
+\begin{itemize}
+    \item Área a la izquierda de $Z = 2,00$: $P(Z \le 2,00) = 0,9772$
+    \item Área a la izquierda de $Z = -2,00$: $P(Z \le -2,00) = 0,0228$
+\end{itemize}
+
+Restamos para obtener el área central (aceptación de la pieza):
+\[ P(\text{Aceptado}) = 0,9772 - 0,0228 = 0,9544 \]
+
+\subsection*{5. Cálculo de la Probabilidad de Descarte}
+El problema no nos pregunta la tasa de aceptación, sino \textbf{cuántos se descartarán} (aquellos que caigan en las dos colas de la campana, fuera de la especificación). 
+Calculamos esto usando la regla del complemento:
+\[ P(\text{Descarte}) = 1 - P(\text{Aceptado}) \]
+\[ P(\text{Descarte}) = 1 - 0,9544 = 0,0456 \]
+
+Para expresarlo como un promedio porcentual sobre el total de la producción, multiplicamos por 100:
+\[ 0,0456 \cdot 100\% = 4,56\% \]
+
+\vspace{0.5cm}
+\noindent\textbf{Respuesta Final:} En promedio, se descartarán el \textbf{4,56\%} de los baleros fabricados. (El resultado matemático concuerda con la clave de respuesta de la guía).
+
+\end{document}

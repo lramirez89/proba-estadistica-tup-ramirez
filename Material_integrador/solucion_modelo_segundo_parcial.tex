@@ -1,0 +1,323 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{fontspec}
+\usepackage[spanish, bidi=basic, provide=*]{babel}
+\babelprovide[import, onchar=ids fonts]{spanish}
+\babelfont{rm}{Noto Sans}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{hyperref}
+
+\setlist[itemize]{label=-}
+
+\title{\textbf{Resolución: Modelo de Segundo Parcial}}
+\author{Probabilidad y Estadística - DIV121}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Ejercicio 1}
+\textbf{Enunciado:} Un embarque de 20 computadoras contiene 3 defectuosas. Se compran 2 al azar. $X$: ``número de computadoras defectuosas''.
+
+\textbf{Análisis inicial:} 
+Tenemos una población pequeña y conocida ($N = 20$). Sabemos cuántos elementos cumplen la condición de ``éxito'' ($K = 3$ defectuosas) y cuántos son ``fracaso'' ($N - K = 17$ sanas). Se toma una muestra de $n = 2$ computadoras \textbf{sin reposición} (se compran a la vez). 
+
+\begin{itemize}
+    \item \textbf{¡Atención (Error común)!} Muchos estudiantes intentan resolver esto usando la Distribución Binomial calculando $p = 3/20 = 0.15$. Esto es \textbf{incorrecto} porque al no haber reposición y ser una muestra grande respecto al total ($n > 0.05N$), la probabilidad va cambiando en cada extracción.
+\end{itemize}
+
+La variable $X$ sigue una \textbf{Distribución Hipergeométrica} con parámetros $N=20$, $K=3$, $n=2$.
+El dominio de la variable (valores posibles de $X$) es $\{0, 1, 2\}$.
+
+La función de probabilidad es:
+\begin{equation*}
+P(X = x) = \frac{\binom{K}{x} \binom{N-K}{n-x}}{\binom{N}{n}} = \frac{\binom{3}{x} \binom{17}{2-x}}{\binom{20}{2}}
+\end{equation*}
+
+Casos totales posibles: $\binom{20}{2} = \frac{20!}{2!18!} = \frac{20 \cdot 19}{2} = 190$.
+
+\subsection*{a) Distribución de probabilidad $f(x)$ y gráfica}
+Calculamos las probabilidades puntuales:
+\begin{align*}
+f(0) &= P(X = 0) = \frac{\binom{3}{0} \binom{17}{2}}{190} = \frac{1 \cdot 136}{190} = \frac{136}{190} \approx 0.7158 \\
+f(1) &= P(X = 1) = \frac{\binom{3}{1} \binom{17}{1}}{190} = \frac{3 \cdot 17}{190} = \frac{51}{190} \approx 0.2684 \\
+f(2) &= P(X = 2) = \frac{\binom{3}{2} \binom{17}{0}}{190} = \frac{3 \cdot 1}{190} = \frac{3}{190} \approx 0.0158
+\end{align*}
+\textit{Verificación: $136 + 51 + 3 = 190$. La suma de probabilidades da 1.}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    ymin=0, ymax=0.8,
+    xtick={0,1,2},
+    ylabel={$f(x)$},
+    xlabel={$x$},
+    width=8cm, height=5cm,
+    bar width=20pt,
+    nodes near coords,
+    nodes near coords align={vertical}
+]
+\addplot coordinates {(0,0.7158) (1,0.2684) (2,0.0158)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsection*{b) Distribución acumulada $F(x)$ y gráfica}
+La función de distribución acumulada suma las probabilidades hasta un valor dado:
+\begin{equation*}
+F(x) = 
+\begin{cases} 
+0 & \text{si } x < 0 \\
+136/190 \approx 0.7158 & \text{si } 0 \le x < 1 \\
+187/190 \approx 0.9842 & \text{si } 1 \le x < 2 \\
+1 & \text{si } x \ge 2 
+\end{cases}
+\end{equation*}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    ymin=0, ymax=1.1,
+    xmin=-0.5, xmax=2.8,
+    xtick={0,1,2},
+    ytick={0, 0.7158, 0.9842, 1},
+    ylabel={$F(x)$},
+    xlabel={$x$},
+    width=9cm, height=5.5cm,
+    axis lines=left
+]
+% Líneas horizontales de los intervalos
+\addplot[thick, blue, domain=-0.5:0] {0};
+\addplot[thick, blue, domain=0:1] {0.7158};
+\addplot[thick, blue, domain=1:2] {0.9842};
+\addplot[thick, blue, domain=2:2.8] {1};
+
+% Líneas punteadas verticales (saltos)
+\draw[densely dashed, gray] (axis cs:0,0) -- (axis cs:0,0.7158);
+\draw[densely dashed, gray] (axis cs:1,0.7158) -- (axis cs:1,0.9842);
+\draw[densely dashed, gray] (axis cs:2,0.9842) -- (axis cs:2,1);
+
+% Círculos llenos (extremos izquierdos incluidos)
+\addplot[only marks, mark=*, color=blue] coordinates {(0,0.7158) (1,0.9842) (2,1)};
+
+% Círculos blancos (extremos derechos excluidos, indicando que el valor no pertenece)
+\addplot[only marks, mark=*, mark options={fill=white, draw=blue, thick}, color=blue] coordinates {(0,0) (1,0.7158) (2,0.9842)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\section*{Ejercicio 2}
+\textbf{Enunciado:} El 30\% de los pozos presentan contaminación. Se eligen 10 al azar.
+
+\subsection*{a) Tipo de distribución de probabilidad y sus parámetros}
+Definimos ``éxito'' = El pozo presenta contaminación. 
+La probabilidad de éxito es constante e independiente para cada pozo: $p = 0.30$.
+Se realizan $n = 10$ ensayos (pozos seleccionados).
+\begin{itemize}
+    \item $X$: ``Número de pozos con impurezas en la muestra de 10''.
+    \item Distribución: \textbf{Binomial}.
+    \item Parámetros: $n = 10$, $p = 0.30$. Notación: $X \sim Bi(10; 0.30)$.
+\end{itemize}
+
+\subsection*{b) Probabilidad de que exactamente 3 pozos tengan impurezas}
+Usamos la fórmula $P(X = x) = \binom{n}{x} p^x (1-p)^{n-x}$:
+\begin{equation*}
+P(X = 3) = \binom{10}{3} (0.30)^3 (0.70)^7 = 120 \cdot 0.027 \cdot 0.08235 \approx 0.2668
+\end{equation*}
+La probabilidad es del \textbf{26.68\%}.
+
+\subsection*{c) Probabilidad de que más de 3 pozos tengan impurezas}
+Se nos pide $P(X > 3)$.
+\begin{itemize}
+    \item \textbf{¡Atención (Error común)!} Es muy largo calcular $P(4)+P(5)+...+P(10)$. Lo correcto es usar el complemento: $P(X > 3) = 1 - P(X \le 3)$. Además, recuerden que $P(X \le 3)$ incluye al 0, 1, 2 y 3.
+\end{itemize}
+\begin{align*}
+P(X = 0) &= \binom{10}{0} (0.30)^0 (0.70)^{10} \approx 0.0282 \\
+P(X = 1) &= \binom{10}{1} (0.30)^1 (0.70)^9 \approx 0.1211 \\
+P(X = 2) &= \binom{10}{2} (0.30)^2 (0.70)^8 = 45 \cdot 0.09 \cdot 0.0576 \approx 0.2335 \\
+P(X = 3) &\approx 0.2668 \quad \text{(calculado en el inciso anterior)}
+\end{align*}
+Sumamos las probabilidades acumuladas:
+\begin{equation*}
+P(X \le 3) = 0.0282 + 0.1211 + 0.2335 + 0.2668 = 0.6496
+\end{equation*}
+Finalmente:
+\begin{equation*}
+P(X > 3) = 1 - 0.6496 = 0.3504
+\end{equation*}
+La probabilidad es del \textbf{35.04\%}.
+
+
+\section*{Ejercicio 3}
+\textbf{Enunciado:} Probabilidad de un accidente diario es 0.005. Determinar la probabilidad de exactamente 2 accidentes en un mes de 20 días laborables.
+
+Este problema modela eventos que ocurren con \textbf{muy poca frecuencia} en un intervalo de tiempo. Por esto utilizamos la \textbf{Distribución de Poisson} (o bien Poisson como aproximación a la Binomial para $n$ grande y $p$ pequeño).
+
+\begin{itemize}
+    \item \textbf{¡Atención (Error común)!} El problema menciona que el año tiene 250 días como dato distractor. La pregunta nos pide analizar \textbf{un mes de 20 días laborables}. El parámetro $n$ debe coincidir con la ventana de tiempo que estamos analizando.
+\end{itemize}
+
+Calculamos la media (tasa promedio) de accidentes esperada para 20 días:
+\begin{equation*}
+\lambda = n \cdot p = 20 \cdot 0.005 = 0.1 \text{ accidentes por mes}
+\end{equation*}
+Definimos $X$: ``Número de accidentes en 20 días laborables''. $X \sim Po(\lambda = 0.1)$.
+
+Fórmula de Poisson: $P(X = x) = \frac{e^{-\lambda} \lambda^x}{x!}$
+\begin{equation*}
+P(X = 2) = \frac{e^{-0.1} \cdot (0.1)^2}{2!} = \frac{0.9048 \cdot 0.01}{2} \approx 0.00452
+\end{equation*}
+La probabilidad es de \textbf{0.45\%}.
+
+
+\section*{Ejercicio 4}
+\textbf{Enunciado:} Duración de baterías se distribuye normalmente con $\mu = 3$ y $\sigma = 0.5$ años. $X \sim N(3; 0.5^2)$. Variable $X$: ``Duración de la batería en años''.
+
+Recuerden la fórmula de estandarización: $Z = \frac{X - \mu}{\sigma}$.
+
+\subsection*{a) Probabilidad de que dure menos de 2.3 años}
+Buscamos $P(X < 2.3)$. Estandarizamos el valor:
+\begin{equation*}
+Z = \frac{2.3 - 3}{0.5} = \frac{-0.7}{0.5} = -1.40
+\end{equation*}
+Buscamos el valor directamente en la tabla de la Normal (o mediante su complemento $1 - 0.9192$):
+\begin{equation*}
+P(Z < -1.40) = 0.0808
+\end{equation*}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    no markers, domain=1:5, samples=50,
+    axis x line=bottom, hide y axis,
+    height=4cm, width=8cm,
+    xtick={2.3, 3}
+]
+\addplot[fill=blue!20, domain=1:2.3] {exp(-((x-3)^2)/(2*0.5^2))} \closedcycle;
+\addplot[thick, blue] {exp(-((x-3)^2)/(2*0.5^2))};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsection*{b) Probabilidad de que dure más de 4 años}
+Buscamos $P(X > 4)$. Estandarizamos:
+\begin{equation*}
+Z = \frac{4 - 3}{0.5} = \frac{1}{0.5} = 2.00
+\end{equation*}
+Por propiedad del complemento (ya que la tabla nos da el área acumulada a izquierda):
+\begin{equation*}
+P(Z > 2.00) = 1 - P(Z \le 2.00) = 1 - 0.9772 = 0.0228
+\end{equation*}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    no markers, domain=1:5, samples=50,
+    axis x line=bottom, hide y axis,
+    height=4cm, width=8cm,
+    xtick={3, 4}
+]
+\addplot[fill=blue!20, domain=4:5] {exp(-((x-3)^2)/(2*0.5^2))} \closedcycle;
+\addplot[thick, blue] {exp(-((x-3)^2)/(2*0.5^2))};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+
+\section*{Ejercicio 5}
+\textbf{Enunciado:} Dada la variable $X \sim N(10; 2^2)$.
+
+\begin{itemize}
+    \item \textbf{¡Atención (Error común)!} La notación estándar es $N(\mu; \sigma^2)$. Si dice $N(10; 2^2)$, significa que la varianza es $2^2=4$ y \textbf{la desviación estándar es $\sigma = 2$}. No utilicen $\sigma = 4$ ni $\sigma = \sqrt{2}$.
+\end{itemize}
+
+\subsection*{a) $P(X < 8)$}
+\begin{equation*}
+Z = \frac{8 - 10}{2} = -1.00 \implies P(Z < -1.00) = 0.1587
+\end{equation*}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    no markers, domain=2:18, samples=50,
+    axis x line=bottom, hide y axis,
+    height=4cm, width=8cm,
+    xtick={8, 10}
+]
+\addplot[fill=blue!20, domain=2:8] {exp(-((x-10)^2)/(2*2^2))} \closedcycle;
+\addplot[thick, blue] {exp(-((x-10)^2)/(2*2^2))};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsection*{b) Valor de $k$ tal que $P(X < k) = 0.020$}
+Buscamos el valor $Z$ en la tabla normal cuya área acumulada a izquierda sea $0.0200$. 
+Buscando directamente este valor (o el más cercano) en la parte de la tabla con valores negativos para $Z$, encontramos que corresponde a $Z = -2.05$.
+\begin{equation*}
+-2.05 = \frac{k - 10}{2} \implies k = 10 + (-2.05 \cdot 2) = 10 - 4.10 = 5.90
+\end{equation*}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    no markers, domain=2:18, samples=50,
+    axis x line=bottom, hide y axis,
+    height=4cm, width=8cm,
+    xtick={5.9, 10}
+]
+\addplot[fill=blue!20, domain=2:5.9] {exp(-((x-10)^2)/(2*2^2))} \closedcycle;
+\addplot[thick, blue] {exp(-((x-10)^2)/(2*2^2))};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsection*{c) Valor de $k$ tal que $P(X > k) = 0.650$}
+Si el área a la \textit{derecha} de $k$ es 0.650, entonces el área a su \textit{izquierda} (acumulada) es $P(X < k) = 1 - 0.650 = 0.350$. 
+Buscamos el valor $0.3500$ directamente en la tabla de $Z$ (parte negativa).
+En la tabla, encontramos los valores cercanos $P(Z < -0.39) = 0.3483$ y $P(Z < -0.38) = 0.3520$. Aproximando (o interpolando), usaremos $Z \approx -0.385$.
+\begin{equation*}
+-0.385 = \frac{k - 10}{2} \implies k = 10 + (-0.385 \cdot 2) = 10 - 0.77 = 9.23
+\end{equation*}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    no markers, domain=2:18, samples=50,
+    axis x line=bottom, hide y axis,
+    height=4cm, width=8cm,
+    xtick={9.23, 10}
+]
+\addplot[fill=blue!20, domain=9.23:18] {exp(-((x-10)^2)/(2*2^2))} \closedcycle;
+\addplot[thick, blue] {exp(-((x-10)^2)/(2*2^2))};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsection*{d) $P(12 < X < 18)$}
+Estandarizamos ambos límites:
+\begin{align*}
+Z_1 &= \frac{12 - 10}{2} = 1.00 \\
+Z_2 &= \frac{18 - 10}{2} = 4.00
+\end{align*}
+\begin{equation*}
+P(1.00 < Z < 4.00) = P(Z < 4.00) - P(Z < 1.00) \approx 1 - 0.8413 = 0.1587
+\end{equation*}
+\textit{Nota: $P(Z < 4.00)$ es un valor tan extremo que para cálculos prácticos se considera $1$.}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    no markers, domain=2:18, samples=50,
+    axis x line=bottom, hide y axis,
+    height=4cm, width=8cm,
+    xtick={10, 12, 18}
+]
+\addplot[fill=blue!20, domain=12:18] {exp(-((x-10)^2)/(2*2^2))} \closedcycle;
+\addplot[thick, blue] {exp(-((x-10)^2)/(2*2^2))};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\end{document}

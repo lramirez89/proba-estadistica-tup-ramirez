@@ -1,0 +1,126 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{fontspec}
+\usepackage[spanish, bidi=basic, provide=*]{babel}
+\babelprovide[import, onchar=ids fonts]{spanish}
+\babelfont{rm}{Noto Sans}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{xcolor}
+
+\begin{document}
+
+\section*{Resolución del Ejercicio 189 (Distribución Normal)}
+
+\textbf{Enunciado:} \textit{Una compañía fabrica focos cuya duración es normalmente distribuida con una media igual a 800 horas y una desviación estándar de 40 horas. Hallar la probabilidad de que un foco se funda entre las 778 y 834 horas de uso.}
+
+\vspace{0.5cm}
+
+\subsection*{Paso 1: Identificar la variable y el área de trabajo ($X$)}
+Definimos nuestra variable aleatoria de estudio $X$ como la ``duración del foco en horas''. 
+Sabemos que $X$ se distribuye de forma Normal con:
+\begin{itemize}
+    \item Centro o Media poblacional ($\mu$): 800 horas.
+    \item Dispersión o Desviación estándar ($\sigma$): 40 horas.
+\end{itemize}
+Por lo tanto, $X \sim N(800; 40^2)$. El problema nos pide hallar la probabilidad de que la duración caiga en el intervalo entre 778 y 834, es decir: \textbf{$P(778 < X < 834)$}.
+
+Visualicemos esta situación. El valor 778 está un poco a la izquierda del centro (800), mientras que el 834 está un poco más alejado hacia la derecha. El área sombreada representa la probabilidad que buscamos:
+
+\begin{center}
+\begin{tikzpicture}[scale=1.8]
+    % Eje X
+    \draw[->, thick] (-3.5,0) -- (3.5,0) node[right] {$X$ (Horas)};
+    
+    % Area sombreada (Area buscada)
+    \fill[cyan!30] (-0.55,0) -- plot[domain=-0.55:0.85, samples=50] (\x, {exp(-0.5*\x*\x)/sqrt(2*pi)}) -- (0.85,0) -- cycle;
+    
+    % Curva normal real
+    \draw[thick, blue!80!black] plot[domain=-3.2:3.2, samples=100] (\x, {exp(-0.5*\x*\x)/sqrt(2*pi)});
+    
+    % Lineas limites del intervalo
+    \draw[dashed, thick] (-0.55,0) -- (-0.55, {exp(-0.5*(-0.55)*(-0.55))/sqrt(2*pi)});
+    \draw[dashed, thick] (0.85,0) -- (0.85, {exp(-0.5*(0.85)*(0.85))/sqrt(2*pi)});
+    
+    % Eje central (Media)
+    \draw[dashed, red!80!black, thick] (0,0) -- (0, {1/sqrt(2*pi)});
+    
+    % Etiquetas en el eje X (escala real)
+    \node[below, font=\small, text=red!80!black] at (0,-0.05) {\textbf{800}};
+    \node[below, font=\small] at (-0.55,-0.05) {778};
+    \node[below, font=\small] at (0.85,-0.05) {834};
+    
+    % Etiqueta de la curva
+    \node[above, font=\small, text=blue!80!black] at (2.2, 0.25) {$X \sim N(800; 40^2)$};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.3cm}
+
+\subsection*{Paso 2: El puente hacia la tabla (Estandarización $Z$)}
+Las tablas de probabilidad de la distribución normal no pueden abarcar todas las combinaciones infinitas de medias y desviaciones (como nuestra $\mu=800$ y $\sigma=40$). Por eso, existe \textbf{una única regla universal}: la Distribución Normal Estándar ($Z$), que siempre tiene media $0$ y desviación $1$.
+
+Estandarizar significa traducir nuestros valores reales (horas) a ``pasos'' de desviación estándar medidos desde el centro. Usamos la fórmula:
+\[ Z = \frac{X - \mu}{\sigma} \]
+
+Traducimos nuestros dos límites de tiempo a la regla universal $Z$:
+\begin{itemize}
+    \item Para $X_1 = 778$: \quad $Z_1 = \frac{778 - 800}{40} = \frac{-22}{40} = \textbf{-0,55}$
+    \item Para $X_2 = 834$: \quad $Z_2 = \frac{834 - 800}{40} = \frac{34}{40} = \textbf{0,85}$
+\end{itemize}
+
+\subsection*{Paso 3: Visualización de la curva Estandarizada ($Z$)}
+¿Qué relación hay entre ambas curvas? \textbf{La forma de la campana y el tamaño del área sombreada son exactamente los mismos}. Lo único que hicimos fue cambiar la ``cinta métrica'' del eje horizontal. Ahora el centro es $0$, el $778$ se convirtió en $-0,55$ y el $834$ se convirtió en $0,85$.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.8]
+    % Eje Z
+    \draw[->, thick] (-3.5,0) -- (3.5,0) node[right] {$Z$ (Desviaciones)};
+    
+    % Area sombreada (Misma proporcion)
+    \fill[orange!30] (-0.55,0) -- plot[domain=-0.55:0.85, samples=50] (\x, {exp(-0.5*\x*\x)/sqrt(2*pi)}) -- (0.85,0) -- cycle;
+    
+    % Curva normal estandar
+    \draw[thick, red!80!black] plot[domain=-3.2:3.2, samples=100] (\x, {exp(-0.5*\x*\x)/sqrt(2*pi)});
+    
+    % Lineas limites del intervalo Z
+    \draw[dashed, thick] (-0.55,0) -- (-0.55, {exp(-0.5*(-0.55)*(-0.55))/sqrt(2*pi)});
+    \draw[dashed, thick] (0.85,0) -- (0.85, {exp(-0.5*(0.85)*(0.85))/sqrt(2*pi)});
+    
+    % Eje central Z
+    \draw[dashed, blue!80!black, thick] (0,0) -- (0, {1/sqrt(2*pi)});
+    
+    % Etiquetas en el eje Z
+    \node[below, font=\small, text=blue!80!black] at (0,-0.05) {\textbf{0}};
+    \node[below, font=\small] at (-0.55,-0.05) {-0,55};
+    \node[below, font=\small] at (0.85,-0.05) {0,85};
+    
+    % Etiqueta de la curva Z
+    \node[above, font=\small, text=red!80!black] at (2.2, 0.25) {$Z \sim N(0; 1^2)$};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.3cm}
+
+\subsection*{Paso 4: Cálculo de la probabilidad (Área)}
+El problema original $P(778 < X < 834)$ se ha transformado matemáticamente en:
+\[ P(-0,55 < Z < 0,85) \]
+
+Por lógica geométrica, el área naranja comprendida entre esos dos puntos es igual al área total acumulada desde la izquierda hasta el punto más lejano ($Z=0,85$), menos el ``excedente'' acumulado hasta el punto de corte inferior ($Z=-0,55$). En fórmula:
+\[ P(-0,55 < Z < 0,85) = P(Z < 0,85) - P(Z < -0,55) \]
+
+Buscamos estos valores en la tabla de distribución Normal Acumulada:
+\begin{itemize}
+    \item $P(Z < 0,85) = 0,8023$ \quad (El 80,23\% de la curva está a la izquierda de $0,85$)
+    \item $P(Z < -0,55) = 0,2912$ \quad (El 29,12\% de la curva está a la izquierda de $-0,55$)
+\end{itemize}
+
+Restamos ambas áreas para obtener el segmento central:
+\[ P(-0,55 < Z < 0,85) = 0,8023 - 0,2912 = \textbf{0,5111} \]
+
+\vspace{0.3cm}
+\noindent\colorbox{yellow!30}{\parbox{\textwidth}{
+\textbf{Respuesta Final:} La probabilidad de que un foco se funda entre las 778 y 834 horas de uso es de \textbf{0,5111} (o lo que es lo mismo, el 51,11\% de los focos).
+}}
+
+\end{document}
